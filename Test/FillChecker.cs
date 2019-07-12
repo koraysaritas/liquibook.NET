@@ -2,9 +2,11 @@
 using Liquibook.NET.Book;
 using Liquibook.NET.Simple;
 using Liquibook.NET.Types;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Test
 {
+    [TestClass]
     public class FillChecker
     {
         private IOrder Order { get; }

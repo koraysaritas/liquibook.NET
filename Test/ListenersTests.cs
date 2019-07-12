@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using Liquibook.NET.Book;
+﻿using Liquibook.NET.Book;
 using Liquibook.NET.Events;
 using Liquibook.NET.Simple;
 using Liquibook.NET.Types;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace Test
 {
+    [TestClass]
     public class ListenersTests
     {
-        [Fact]
+        [TestMethod]
         public void TestOrderCallbacks()
         {
             var order0 = new SimpleOrder(false, 3250, 100);
@@ -24,44 +24,44 @@ namespace Test
             order_book.SetOrderListener(listener);
             // Add order, should be accepted
             order_book.Add(order0);
-            Assert.Equal(1, listener.accepts_.Count);
+            Assert.AreEqual(1, listener.accepts_.Count);
             listener.Reset();
             // Add matching order, should be accepted, followed by a fill
             order_book.Add(order1);
-            Assert.Equal(1, listener.accepts_.Count);
-            Assert.Equal(1, listener.fills_.Count);
+            Assert.AreEqual(1, listener.accepts_.Count);
+            Assert.AreEqual(1, listener.fills_.Count);
             listener.Reset();
             // Add invalid order, should be rejected
             order_book.Add(order2);
-            Assert.Equal(1, listener.rejects_.Count);
+            Assert.AreEqual(1, listener.rejects_.Count);
             listener.Reset();
             // Cancel only valid order, should be cancelled
             order_book.Cancel(order1);
-            Assert.Equal(1, listener.cancels_.Count);
+            Assert.AreEqual(1, listener.cancels_.Count);
             listener.Reset();
             // Cancel filled order, should be rejected
             order_book.Cancel(order0);
-            Assert.Equal(1, listener.cancel_rejects_.Count);
+            Assert.AreEqual(1, listener.cancel_rejects_.Count);
             listener.Reset();
             // Add a new order and replace it, should be replaced
             order_book.Add(order3);
             order_book.Replace(order3, 0, 3250);
-            Assert.Equal(1, listener.accepts_.Count);
-            Assert.Equal(1, listener.replaces_.Count);
+            Assert.AreEqual(1, listener.accepts_.Count);
+            Assert.AreEqual(1, listener.replaces_.Count);
             listener.Reset();
             // Add matching order, should be accepted, followed by a fill
             order_book.Add(order4);
-            Assert.Equal(1, listener.accepts_.Count);
-            Assert.Equal(1, listener.fills_.Count);
+            Assert.AreEqual(1, listener.accepts_.Count);
+            Assert.AreEqual(1, listener.fills_.Count);
             listener.Reset();
             // Replace matched order, with too large of a size decrease, replace
             // should be rejected
             order_book.Replace(order3, -500, 0);
-            Assert.Equal(0, listener.replaces_.Count);
-            Assert.Equal(1, listener.replace_rejects_.Count);
+            Assert.AreEqual(0, listener.replaces_.Count);
+            Assert.AreEqual(1, listener.replace_rejects_.Count);
         }
 
-        [Fact]
+        [TestMethod]
         public void TestOrderBookCallbacks()
         {
             var order0 = new SimpleOrder(false, 3250, 100);
@@ -75,40 +75,40 @@ namespace Test
             order_book.SetOrderBookListener(listener);
             // Add order, should be accepted
             order_book.Add(order0);
-            Assert.Equal(1, listener.changes_.Count);
+            Assert.AreEqual(1, listener.changes_.Count);
             listener.Reset();
             // Add matching order, should be accepted, followed by a fill
             order_book.Add(order1);
-            Assert.Equal(1, listener.changes_.Count);
+            Assert.AreEqual(1, listener.changes_.Count);
             listener.Reset();
             // Add invalid order, should be rejected
             order_book.Add(order2);
-            Assert.Equal(0, listener.changes_.Count); // NO CHANGE
+            Assert.AreEqual(0, listener.changes_.Count); // NO CHANGE
             listener.Reset();
             // Cancel only valid order, should be cancelled
             order_book.Cancel(order1);
-            Assert.Equal(1, listener.changes_.Count);
+            Assert.AreEqual(1, listener.changes_.Count);
             listener.Reset();
             // Cancel filled order, should be rejected
             order_book.Cancel(order0);
-            Assert.Equal(0, listener.changes_.Count); // NO CHANGE
+            Assert.AreEqual(0, listener.changes_.Count); // NO CHANGE
             listener.Reset();
             // Add a new order and replace it, should be replaced
             order_book.Add(order3);
             order_book.Replace(order3, 0, 3250);
-            Assert.Equal(2, listener.changes_.Count);
+            Assert.AreEqual(2, listener.changes_.Count);
             listener.Reset();
             // Add matching order, should be accepted, followed by a fill
             order_book.Add(order4);
-            Assert.Equal(1, listener.changes_.Count);
+            Assert.AreEqual(1, listener.changes_.Count);
             listener.Reset();
             // Replace matched order, with too large of a size decrease, replace
             // should be rejected
             order_book.Replace(order3, -500, 0);
-            Assert.Equal(0, listener.changes_.Count); // NO CHANGE
+            Assert.AreEqual(0, listener.changes_.Count); // NO CHANGE
         }
 
-        [Fact]
+        [TestMethod]
         public void TestDepthCallbacks()
         {
             var buy0 = new SimpleOrder(true, 3250, 100);
@@ -135,13 +135,13 @@ namespace Test
             order_book.Add(buy2);
             order_book.Add(buy3);
             order_book.Add(buy4);
-            Assert.Equal(5, listener.changes_.Count);
+            Assert.AreEqual(5, listener.changes_.Count);
             listener.Reset();
 
             // Add buy orders past end, should be accepted, but not affect depth
             order_book.Add(buy5);
             order_book.Add(buy6);
-            Assert.Equal(0, listener.changes_.Count);
+            Assert.AreEqual(0, listener.changes_.Count);
             listener.Reset();
 
             // Add sell orders, should be accepted and affect depth
@@ -151,16 +151,16 @@ namespace Test
             order_book.Add(sell2);
             order_book.Add(sell1);
             order_book.Add(sell0);
-            Assert.Equal(6, listener.changes_.Count);
+            Assert.AreEqual(6, listener.changes_.Count);
             listener.Reset();
 
             // Add sell order past end, should be accepted, but not affect depth
             order_book.Add(sell6);
-            Assert.Equal(0, listener.changes_.Count);
+            Assert.AreEqual(0, listener.changes_.Count);
             listener.Reset();
         }
 
-        [Fact]
+        [TestMethod]
         public void TestBboCallbacks()
         {
             var buy0 = new SimpleOrder(true, 3250, 100);
@@ -183,57 +183,57 @@ namespace Test
             order_book.SetBboListener(listener);
             // Add buy orders, should be accepted
             order_book.Add(buy0);
-            Assert.Equal(1, listener.changes_.Count);
+            Assert.AreEqual(1, listener.changes_.Count);
             listener.Reset();
             order_book.Add(buy1);
-            Assert.Equal(0, listener.changes_.Count);
+            Assert.AreEqual(0, listener.changes_.Count);
             listener.Reset();
             order_book.Add(buy2);
-            Assert.Equal(0, listener.changes_.Count);
+            Assert.AreEqual(0, listener.changes_.Count);
             listener.Reset();
             order_book.Add(buy3);
-            Assert.Equal(0, listener.changes_.Count);
+            Assert.AreEqual(0, listener.changes_.Count);
             listener.Reset();
             order_book.Add(buy4);
-            Assert.Equal(0, listener.changes_.Count);
+            Assert.AreEqual(0, listener.changes_.Count);
             listener.Reset();
 
             // Add buy orders past end, should be accepted, but not affect depth
             order_book.Add(buy5);
-            Assert.Equal(0, listener.changes_.Count);
+            Assert.AreEqual(0, listener.changes_.Count);
             listener.Reset();
             order_book.Add(buy6);
-            Assert.Equal(0, listener.changes_.Count);
+            Assert.AreEqual(0, listener.changes_.Count);
             listener.Reset();
 
             // Add sell orders, should be accepted and affect bbo
             order_book.Add(sell2);
-            Assert.Equal(1, listener.changes_.Count);
+            Assert.AreEqual(1, listener.changes_.Count);
             listener.Reset();
             order_book.Add(sell1);
-            Assert.Equal(1, listener.changes_.Count);
+            Assert.AreEqual(1, listener.changes_.Count);
             listener.Reset();
             order_book.Add(sell0);
-            Assert.Equal(1, listener.changes_.Count);
+            Assert.AreEqual(1, listener.changes_.Count);
             listener.Reset();
             // Add sell orders worse than best bid, should not effect bbo
             order_book.Add(sell5);
-            Assert.Equal(0, listener.changes_.Count);
+            Assert.AreEqual(0, listener.changes_.Count);
             listener.Reset();
             order_book.Add(sell4);
-            Assert.Equal(0, listener.changes_.Count);
+            Assert.AreEqual(0, listener.changes_.Count);
             listener.Reset();
             order_book.Add(sell3);
-            Assert.Equal(0, listener.changes_.Count);
+            Assert.AreEqual(0, listener.changes_.Count);
             listener.Reset();
 
             // Add sell order past end, should be accepted, but not affect depth
             order_book.Add(sell6);
-            Assert.Equal(0, listener.changes_.Count);
+            Assert.AreEqual(0, listener.changes_.Count);
             listener.Reset();
         }
 
-        [Fact]
+        [TestMethod]
         public void TestTradeCallbacks()
         {
             var order0 = new SimpleOrder(false, 3250, 100);
@@ -247,41 +247,41 @@ namespace Test
             order_book.SetTradeListener(listener);
             // Add order, should be accepted
             order_book.Add(order0);
-            Assert.Equal(0, listener.quantities_.Count);
+            Assert.AreEqual(0, listener.quantities_.Count);
             listener.Reset();
             // Add matching order, should result in a trade
             order_book.Add(order1);
-            Assert.Equal(1, listener.quantities_.Count);
-            Assert.Equal(1, listener.costs_.Count);
-            Assert.Equal((Quantity)100, listener.quantities_[0]);
-            Assert.Equal(100 * 3250, listener.costs_[0]);
+            Assert.AreEqual(1, listener.quantities_.Count);
+            Assert.AreEqual(1, listener.costs_.Count);
+            Assert.AreEqual((Quantity)100, listener.quantities_[0]);
+            Assert.AreEqual(100 * 3250, listener.costs_[0]);
             listener.Reset();
             // Add invalid order, should be rejected
             order_book.Add(order2);
-            Assert.Equal(0, listener.quantities_.Count);
+            Assert.AreEqual(0, listener.quantities_.Count);
             listener.Reset();
             // Cancel only valid order, should be cancelled
             order_book.Cancel(order1);
-            Assert.Equal(0, listener.quantities_.Count);
+            Assert.AreEqual(0, listener.quantities_.Count);
             listener.Reset();
             // Cancel filled order, should be rejected
             order_book.Cancel(order0);
-            Assert.Equal(0, listener.quantities_.Count);
+            Assert.AreEqual(0, listener.quantities_.Count);
             listener.Reset();
             // Add a new order and replace it, should be replaced
             order_book.Add(order3);
             order_book.Replace(order3, 0, 3250);
-            Assert.Equal(0, listener.quantities_.Count);
+            Assert.AreEqual(0, listener.quantities_.Count);
             listener.Reset();
             // Add matching order, should be accepted, followed by a fill
             order_book.Add(order4);
-            Assert.Equal(1, listener.quantities_.Count);
-            Assert.Equal(1, listener.costs_.Count);
+            Assert.AreEqual(1, listener.quantities_.Count);
+            Assert.AreEqual(1, listener.costs_.Count);
             listener.Reset();
             // Replace matched order, with too large of a size decrease, replace
             // should be rejected
             order_book.Replace(order3, -500, 0);
-            Assert.Equal(0, listener.quantities_.Count);
+            Assert.AreEqual(0, listener.quantities_.Count);
         }
 
     }
@@ -333,7 +333,7 @@ namespace Test
             replaces_.Clear();
             replace_rejects_.Clear();
         }
-        
+
         public List<SimpleOrder> accepts_ { get; } = new List<SimpleOrder>();
         public List<SimpleOrder> rejects_ { get; } = new List<SimpleOrder>();
         public List<SimpleOrder> fills_ { get; } = new List<SimpleOrder>();
@@ -359,7 +359,7 @@ namespace Test
         public List<Quantity> quantities_ { get; } = new List<Quantity>();
         public List<int> costs_ { get; } = new List<int>();
     }
-    
+
     public class OrderBookCbListener : IOrderBookListener
     {
         public void OnOrderBookChange(object sender, OnOrderBookChangeEventArgs args)
@@ -371,10 +371,10 @@ namespace Test
         {
             changes_.Clear();
         }
-        
+
         public List<OrderBook> changes_ { get; } = new List<OrderBook>();
     }
-    
+
     public class DepthCbListener : IDepthListener
     {
         public void OnDepthChange(object sender, OnDepthChangeEventArgs args)
@@ -386,11 +386,11 @@ namespace Test
         {
             changes_.Clear();
         }
-        
+
         public List<DepthOrderBook> changes_ { get; } = new List<DepthOrderBook>();
-        
+
     }
-    
+
     public class BboCbListener : IBboListener
     {
         public void OnBboChange(object sender, OnBboChangeEventArgs args)
@@ -402,8 +402,8 @@ namespace Test
         {
             changes_.Clear();
         }
-        
+
         public List<DepthOrderBook> changes_ { get; } = new List<DepthOrderBook>();
-        
+
     }
 }

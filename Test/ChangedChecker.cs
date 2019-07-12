@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Liquibook.NET.Book;
+﻿using Liquibook.NET.Book;
 using Liquibook.NET.Types;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Test
 {
+    [TestClass]
     public class ChangedChecker
     {
         private Depth Depth { get; set; }
@@ -24,7 +26,7 @@ namespace Test
         {
             return VerifySideChanged(Depth.Bids, l0, l1, l2, l3, l4);
         }
-        
+
         public bool VerifyAskChanged(bool l0, bool l1, bool l2, bool l3, bool l4)
         {
             return VerifySideChanged(Depth.Asks, l0, l1, l2, l3, l4);
@@ -34,7 +36,7 @@ namespace Test
         {
             return VerifySideStamps(Depth.Bids, l0, l1, l2, l3, l4);
         }
-        
+
         public bool VerifyAskStamps(int l0, int l1, int l2, int l3, int l4)
         {
             return VerifySideStamps(Depth.Asks, l0, l1, l2, l3, l4);
@@ -129,6 +131,6 @@ namespace Test
             }
             return matched;
         }
-        
+
     }
 }

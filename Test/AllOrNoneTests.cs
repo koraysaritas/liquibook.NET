@@ -1,13 +1,14 @@
-﻿using System;
-using System.Linq;
-using Liquibook.NET.Book;
+﻿using Liquibook.NET.Book;
 using Liquibook.NET.Simple;
 using Liquibook.NET.Types;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Linq;
 using static Test.Utils;
 
 namespace Test
 {
+    [TestClass]
     public class AllOrNoneTests
     {
         public OrderConditions AON = OrderConditions.AllOrNone;
@@ -34,7 +35,7 @@ namespace Test
         const bool expectComplete = true;
         const bool expectNoComplete = false;
 
-        [Fact]
+        [TestMethod]
         public void TestRegBidMatchAon()
         {
             var order_book = new SimpleOrderBook();
@@ -45,42 +46,42 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty1);
 
             // No match
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch, expectNoComplete, AON));
-            Assert.True(AddAndVerify(order_book, ask1, expectNoMatch, expectNoComplete, AON));
-            Assert.True(AddAndVerify(order_book, ask2, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, ask1, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, ask2, expectNoMatch));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(3, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(3, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 2, qty1 + qty2));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 2, qty1 + qty2));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Match - complete
             {
                 var fc1 = new FillChecker(bid1, qty1, prc1 * qty1);
                 var fc2 = new FillChecker(ask1, qty1, prc1 * qty1);
-                Assert.True(AddAndVerify(order_book, bid1, expectMatch, expectComplete));
+                Assert.IsTrue(AddAndVerify(order_book, bid1, expectMatch, expectComplete));
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
             }
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty2));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty2));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(2, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(2, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestRegBidMatchMulti()
         {
             var order_book = new SimpleOrderBook();
@@ -91,19 +92,19 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty1);
 
             // No match
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch, expectNoComplete, AON));
-            Assert.True(AddAndVerify(order_book, ask1, expectNoMatch, expectNoComplete, AON));
-            Assert.True(AddAndVerify(order_book, ask2, expectNoMatch, expectNoComplete));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, ask1, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, ask2, expectNoMatch, expectNoComplete));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(3, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(3, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 3, qty7 + qty1 + qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 3, qty7 + qty1 + qty1));
 
             // Match - complete
             {
@@ -111,7 +112,7 @@ namespace Test
                 var fc1 = new FillChecker(ask0, qty1, prc1 * qty1);
                 var fc2 = new FillChecker(ask1, qty1, prc1 * qty1);
                 var fc3 = new FillChecker(ask2, qty2, prc1 * qty2);
-                Assert.True(AddAndVerify(order_book, bid1, expectMatch, expectComplete));
+                Assert.IsTrue(AddAndVerify(order_book, bid1, expectMatch, expectComplete));
                 fc0.AssertFillSuccess();
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
@@ -120,15 +121,15 @@ namespace Test
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty4 + qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty4 + qty1));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestAonBidNoMatch()
         {
             var order_book = new SimpleOrderBook();
@@ -138,42 +139,42 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty1); // no match, price
 
             // No match
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask1, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask1, expectNoMatch));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(2, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(2, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Match - complete
             {
                 var fc1 = new FillChecker(bid1, qtyNone, prcNone);
                 var fc2 = new FillChecker(ask0, qtyNone, prcNone);
-                Assert.True(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
+                Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
             }
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc1, 1, qty3));
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 1, qty3));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Verify sizes
-            Assert.Equal(2, order_book.Bids.Count());
-            Assert.Equal(2, order_book.Asks.Count());
+            Assert.AreEqual(2, order_book.Bids.Count());
+            Assert.AreEqual(2, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestAonBidMatchReg()
         {
             var order_book = new SimpleOrderBook();
@@ -183,41 +184,41 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty1);
 
             // No match
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask1, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask1, expectNoMatch));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(2, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(2, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty4));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty4));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Match - complete
             {
                 var fc1 = new FillChecker(bid1, qty3, prc1 * qty3);
                 var fc2 = new FillChecker(ask0, qty3, prc1 * qty3);
-                Assert.True(AddAndVerify(order_book, bid1, expectMatch, expectComplete, AON));
+                Assert.IsTrue(AddAndVerify(order_book, bid1, expectMatch, expectComplete, AON));
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
             }
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(2, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(2, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestAonBidMatchMulti()
         {
             var order_book = new SimpleOrderBook();
@@ -229,21 +230,21 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty1);
 
             // No match
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask1, expectNoMatch, expectNoComplete, AON));
-            Assert.True(AddAndVerify(order_book, ask2, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask3, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask1, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, ask2, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask3, expectNoMatch));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(4, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(4, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 2, qty4 + qty4));
-            Assert.True(dc.VerifyAsk(prc2, 2, qty1 + qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 2, qty4 + qty4));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 2, qty1 + qty1));
 
             // Match - complete
             {
@@ -251,9 +252,9 @@ namespace Test
                 var fc1 = new FillChecker(bid1, qty6, prc1 * qty2 + prc1 * qty4);
                 var fc2 = new FillChecker(ask0, qty2, prc1 * qty2);
                 var fc3 = new FillChecker(ask1, qty4, prc1 * qty4);
-                var fc4 = new FillChecker(ask2, 0, prc2 * (Quantity) 0);
-                var fc5 = new FillChecker(ask3, 0, prc2 * (Quantity) 0);
-                Assert.True(AddAndVerify(order_book, bid1, expectMatch, expectComplete, AON));
+                var fc4 = new FillChecker(ask2, 0, prc2 * (Quantity)0);
+                var fc5 = new FillChecker(ask3, 0, prc2 * (Quantity)0);
+                Assert.IsTrue(AddAndVerify(order_book, bid1, expectMatch, expectComplete, AON));
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
                 fc3.AssertFillSuccess();
@@ -264,16 +265,16 @@ namespace Test
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty2));
-            Assert.True(dc.VerifyAsk(prc2, 2, qty1 + qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty2));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 2, qty1 + qty1));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(3, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(3, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestAonBidNoMatchMulti()
         {
             var order_book = new SimpleOrderBook();
@@ -284,20 +285,20 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty1);
 
             // No match
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask1, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask2, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask1, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask2, expectNoMatch, expectNoComplete, AON));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(3, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(3, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty4));
-            Assert.True(dc.VerifyAsk(prc2, 2, qty4 + qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty4));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 2, qty4 + qty1));
 
             // Match - complete
             {
@@ -307,7 +308,7 @@ namespace Test
                 var fc2 = new FillChecker(ask0, qty2, qty2 * prc1); // filled 200 @ 250200
                 var fc3 = new FillChecker(ask1, qtyNone, prcNone); // 0
                 var fc4 = new FillChecker(ask2, qty4, qty4 * prc2); // filled 400 @ 500800
-                Assert.True(AddAndVerify(order_book, bid1, expectMatch, expectComplete, AON));
+                Assert.IsTrue(AddAndVerify(order_book, bid1, expectMatch, expectComplete, AON));
                 fc0.AssertFillSuccess();
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
@@ -318,11 +319,11 @@ namespace Test
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty2));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty2));
         }
 
-        [Fact]
+        [TestMethod]
         public void TestAonBidMatchAon()
         {
             var order_book = new SimpleOrderBook();
@@ -332,40 +333,40 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty1);
 
             // No match
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch, expectNoComplete, AON));
-            Assert.True(AddAndVerify(order_book, ask1, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, ask1, expectNoMatch));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(2, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(2, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty3));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty3));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Match - complete
             {
                 var fc1 = new FillChecker(bid1, qty3, prc1 * qty3);
                 var fc2 = new FillChecker(ask0, qty3, prc1 * qty3);
-                Assert.True(AddAndVerify(order_book, bid1, expectMatch, expectComplete, AON));
+                Assert.IsTrue(AddAndVerify(order_book, bid1, expectMatch, expectComplete, AON));
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
             }
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestRegAskMatchAon()
         {
             var order_book = new SimpleOrderBook();
@@ -376,42 +377,42 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty1);
 
             // No match
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
-            Assert.True(AddAndVerify(order_book, bid2, expectNoMatch, expectNoComplete, AON));
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, bid2, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch));
 
             // Verify sizes
-            Assert.Equal(3, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(3, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc1, 2, qty3));
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 2, qty3));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Match - complete
             {
                 var fc1 = new FillChecker(bid2, qty1, prc1 * qty1);
                 var fc2 = new FillChecker(ask1, qty1, prc1 * qty1);
-                Assert.True(AddAndVerify(order_book, ask1, expectMatch, expectComplete));
+                Assert.IsTrue(AddAndVerify(order_book, ask1, expectMatch, expectComplete));
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
             }
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc1, 1, qty2));
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 1, qty2));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Verify sizes
-            Assert.Equal(2, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(2, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestRegAskMatchMulti()
         {
             var order_book = new SimpleOrderBook();
@@ -432,20 +433,20 @@ namespace Test
             int ask1FillAmount = bid1FillAmount + bid2FillAmount + bid0FillAmount;
 
             // No match
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
-            Assert.True(AddAndVerify(order_book, bid2, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, bid2, expectNoMatch, expectNoComplete, AON));
 
             // Verify sizes
-            Assert.Equal(3, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(3, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc1, 2, qty2));
-            Assert.True(dc.VerifyBid(prc0, 1, qty7));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 2, qty2));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty7));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Match - complete
             {
@@ -453,7 +454,7 @@ namespace Test
                 var fc1 = new FillChecker(bid2, qty1, prc1 * qty1);
                 var fc2 = new FillChecker(bid0, qty2, prc0 * qty2);
                 var fc3 = new FillChecker(ask1, qty4, ask1FillAmount);
-                Assert.True(AddAndVerify(order_book, ask1, expectMatch, expectComplete));
+                Assert.IsTrue(AddAndVerify(order_book, ask1, expectMatch, expectComplete));
                 fc0.AssertFillSuccess();
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
@@ -462,15 +463,15 @@ namespace Test
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc0, 1, bid0RemainQty));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, bid0RemainQty));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestAonAskNoMatch()
         {
             var order_book = new SimpleOrderBook();
@@ -481,20 +482,20 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty7);
 
             // No match
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid1, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid2, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid2, expectNoMatch));
 
             // Verify sizes
-            Assert.Equal(3, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(3, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc1, 2, qty2));
-            Assert.True(dc.VerifyBid(prc0, 1, qty7));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 2, qty2));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty7));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Match - complete
             {
@@ -502,7 +503,7 @@ namespace Test
                 var fc1 = new FillChecker(bid2, qtyNone, prcNone);
                 var fc2 = new FillChecker(bid0, qtyNone, prcNone);
                 var fc3 = new FillChecker(ask1, qtyNone, prcNone);
-                Assert.True(AddAndVerify(order_book, ask1, expectNoMatch, expectNoComplete, AON));
+                Assert.IsTrue(AddAndVerify(order_book, ask1, expectNoMatch, expectNoComplete, AON));
                 fc0.AssertFillSuccess();
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
@@ -511,17 +512,17 @@ namespace Test
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc1, 2, qty2));
-            Assert.True(dc.VerifyBid(prc0, 1, qty7));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty4));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 2, qty2));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty7));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty4));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Verify sizes
-            Assert.Equal(3, order_book.Bids.Count());
-            Assert.Equal(2, order_book.Asks.Count());
+            Assert.AreEqual(3, order_book.Bids.Count());
+            Assert.AreEqual(2, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestAonAskMatchReg()
         {
             var order_book = new SimpleOrderBook();
@@ -531,40 +532,40 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty7);
 
             // No match
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid1, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch));
 
             // Verify sizes
-            Assert.Equal(2, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(2, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc1, 1, qty1));
-            Assert.True(dc.VerifyBid(prc0, 1, qty7));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty7));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Match - complete
             {
                 var fc0 = new FillChecker(bid1, qty1, prc1 * qty1);
                 var fc3 = new FillChecker(ask1, qty1, prc1 * qty1);
-                Assert.True(AddAndVerify(order_book, ask1, expectMatch, expectComplete, AON));
+                Assert.IsTrue(AddAndVerify(order_book, ask1, expectMatch, expectComplete, AON));
                 fc0.AssertFillSuccess();
                 fc3.AssertFillSuccess();
             }
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc0, 1, qty7));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty7));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestAonAskMatchMulti()
         {
             var order_book = new SimpleOrderBook();
@@ -576,21 +577,21 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty7);
 
             // No match
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
-            Assert.True(AddAndVerify(order_book, bid2, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid3, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, bid2, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid3, expectNoMatch));
 
             // Verify sizes
-            Assert.Equal(4, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(4, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc1, 3, qty3));
-            Assert.True(dc.VerifyBid(prc0, 1, qty7));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 3, qty3));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty7));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Match - complete
             {
@@ -607,7 +608,7 @@ namespace Test
                 var fc3 = new FillChecker(bid0, b0Fill, b0Cost);
                 int a1Cost = b0Cost + b1Cost + b2Cost + b3Cost;
                 var fc4 = new FillChecker(ask1, qty6, a1Cost);
-                Assert.True(AddAndVerify(order_book, ask1, expectMatch, expectComplete, AON));
+                Assert.IsTrue(AddAndVerify(order_book, ask1, expectMatch, expectComplete, AON));
                 fc0.AssertFillSuccess();
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
@@ -618,16 +619,16 @@ namespace Test
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc0, 1, qty4));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty4));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
         }
-///////////////////
+        ///////////////////
 
-        [Fact]
+        [TestMethod]
         public void TestOneAonBidOneAonAsk()
         {
             var order_book = new SimpleOrderBook();
@@ -635,31 +636,31 @@ namespace Test
             var ask1 = new SimpleOrder(sellSide, prc1, qty1); // AON
 
             // Prime the order book: No Matches
-            Assert.True(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(0, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(0, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc1, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 1, qty1));
 
             // Add matching order
             {
                 var fc1 = new FillChecker(bid1, qty1, qty1 * prc1);
                 var fc3 = new FillChecker(ask1, qty1, qty1 * prc1);
-                Assert.True(AddAndVerify(order_book, ask1, expectMatch, expectComplete, AON));
+                Assert.IsTrue(AddAndVerify(order_book, ask1, expectMatch, expectComplete, AON));
                 fc1.AssertFillSuccess();
                 fc3.AssertFillSuccess();
             }
 
             // Verify sizes
-            Assert.Equal(0, order_book.Bids.Count());
-            Assert.Equal(0, order_book.Asks.Count());
+            Assert.AreEqual(0, order_book.Bids.Count());
+            Assert.AreEqual(0, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestTwoAonBidOneAonAsk()
         {
             var order_book = new SimpleOrderBook();
@@ -668,36 +669,36 @@ namespace Test
             var ask1 = new SimpleOrder(sellSide, prc1, qty3); // AON
 
             // Prime the order book: No Matches
-            Assert.True(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete,
+            Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete,
                 AON)); //AON)); //noConditions
-            Assert.True(AddAndVerify(order_book, bid2, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, bid2, expectNoMatch, expectNoComplete, AON));
 
             // Verify sizes
-            Assert.Equal(2, order_book.Bids.Count());
-            Assert.Equal(0, order_book.Asks.Count());
+            Assert.AreEqual(2, order_book.Bids.Count());
+            Assert.AreEqual(0, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc1, 2, qty1 + qty2));
+            Assert.IsTrue(dc.VerifyBid(prc1, 2, qty1 + qty2));
 
             // Add matching order
             {
                 var fc1 = new FillChecker(bid1, qty1, qty1 * prc1);
                 var fc2 = new FillChecker(bid2, qty2, qty2 * prc1);
                 var fc3 = new FillChecker(ask1, qty3, qty3 * prc1);
-                Assert.True(AddAndVerify(order_book, ask1, expectMatch, expectComplete, AON));
+                Assert.IsTrue(AddAndVerify(order_book, ask1, expectMatch, expectComplete, AON));
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
                 fc3.AssertFillSuccess();
             }
 
             // Verify sizes
-            Assert.Equal(0, order_book.Bids.Count());
-            Assert.Equal(0, order_book.Asks.Count());
+            Assert.AreEqual(0, order_book.Bids.Count());
+            Assert.AreEqual(0, order_book.Asks.Count());
 
         }
 
-        [Fact]
+        [TestMethod]
         public void TestOneAonBidTwoAsk()
         {
             var order_book = new SimpleOrderBook();
@@ -707,37 +708,37 @@ namespace Test
             var ask2 = new SimpleOrder(sellSide, prc1, qty2); // No Conditions
 
             // Prime the order book: No Matches
-            Assert.True(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete,
+            Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete,
                 AON)); //AON)); //noConditions
 
             // Add an order that does NOT meet the AON condition
-            Assert.True(AddAndVerify(order_book, ask1, expectNoMatch, expectNoComplete, NoConditions));
+            Assert.IsTrue(AddAndVerify(order_book, ask1, expectNoMatch, expectNoComplete, NoConditions));
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc1, 1, qty3));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 1, qty3));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty1));
 
             // Add matching order
             {
                 var fc1 = new FillChecker(bid1, qty3, qty3 * prc1);
                 var fc2 = new FillChecker(ask1, qty1, qty1 * prc1);
                 var fc3 = new FillChecker(ask2, qty2, qty2 * prc1);
-                Assert.True(AddAndVerify(order_book, ask2, expectMatch, expectComplete, NoConditions));
+                Assert.IsTrue(AddAndVerify(order_book, ask2, expectMatch, expectComplete, NoConditions));
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
                 fc3.AssertFillSuccess();
             }
 
             // Verify sizes
-            Assert.Equal(0, order_book.Bids.Count());
-            Assert.Equal(0, order_book.Asks.Count());
+            Assert.AreEqual(0, order_book.Bids.Count());
+            Assert.AreEqual(0, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestOneBidTwoAonAsk()
         {
             var order_book = new SimpleOrderBook();
@@ -747,34 +748,34 @@ namespace Test
             var ask2 = new SimpleOrder(sellSide, prc1, qty2); // AON
 
             // Prime the order book: No Matches
-            Assert.True(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(0, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(0, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc1, 1, qty3));
+            Assert.IsTrue(dc.VerifyBid(prc1, 1, qty3));
 
             // Add matching order
             {
                 var fc1 = new FillChecker(bid1, qty3, qty3 * prc1);
                 var fc2 = new FillChecker(ask1, qty1, qty1 * prc1);
                 var fc3 = new FillChecker(ask2, qty2, qty2 * prc1);
-                Assert.True(AddAndVerify(order_book, ask1, expectNoMatch, expectNoComplete, NoConditions));
-                Assert.True(AddAndVerify(order_book, ask2, expectMatch, expectComplete, NoConditions));
+                Assert.IsTrue(AddAndVerify(order_book, ask1, expectNoMatch, expectNoComplete, NoConditions));
+                Assert.IsTrue(AddAndVerify(order_book, ask2, expectMatch, expectComplete, NoConditions));
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
                 fc3.AssertFillSuccess();
             }
 
             // Verify sizes
-            Assert.Equal(0, order_book.Bids.Count());
-            Assert.Equal(0, order_book.Asks.Count());
+            Assert.AreEqual(0, order_book.Bids.Count());
+            Assert.AreEqual(0, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestTwoAonBidTwoAonAsk()
         {
 #if true
@@ -796,18 +797,18 @@ namespace Test
   SimpleOrder bid2(buySide,prc1,qty4); // AON
 
                                         // Prime the order book: No Matches
-  Assert.True(AddAndVerify(order_book,bid1,expectNoMatch,expectNoComplete,AON));
-  Assert.True(AddAndVerify(order_book,bid2,expectNoMatch,expectNoComplete,AON));
-  Assert.True(AddAndVerify(order_book,ask1,expectNoMatch,expectNoComplete,AON));
+  Assert.IsTrue(AddAndVerify(order_book,bid1,expectNoMatch,expectNoComplete,AON));
+  Assert.IsTrue(AddAndVerify(order_book,bid2,expectNoMatch,expectNoComplete,AON));
+  Assert.IsTrue(AddAndVerify(order_book,ask1,expectNoMatch,expectNoComplete,AON));
 
   // Verify sizes
-  Assert.Equal(2u,order_book.Bids.Count());
-  Assert.Equal(1u,order_book.Asks.Count());
+  Assert.AreEqual(2u,order_book.Bids.Count());
+  Assert.AreEqual(1u,order_book.Asks.Count());
 
   // Verify depth
   var dc = new DepthCheck(order_book.Depth);
-  Assert.True(dc.VerifyBid(prc1,2,qty1 + qty4));
-  Assert.True(dc.VerifyAsk(prc1,1,qty3));
+  Assert.IsTrue(dc.VerifyBid(prc1,2,qty1 + qty4));
+  Assert.IsTrue(dc.VerifyAsk(prc1,1,qty3));
 
   // Add matching order
   {
@@ -815,16 +816,16 @@ namespace Test
   SimpleFillCheck fc2(bid2,qty4,qty3 * prc1);
   SimpleFillCheck fc3(ask1,qty3,qty1 * prc1);
   SimpleFillCheck fc4(ask2,qty2,qty2 * prc1);
-  Assert.True(AddAndVerify(order_book,ask2,expectMatch,expectComplete,AON));
+  Assert.IsTrue(AddAndVerify(order_book,ask2,expectMatch,expectComplete,AON));
   }
 
   // Verify sizes
-  Assert.Equal(0,order_book.Bids.Count());
-  Assert.Equal(0,order_book.Asks.Count());
+  Assert.AreEqual(0,order_book.Bids.Count());
+  Assert.AreEqual(0,order_book.Asks.Count());
 #endif
         }
 
-        [Fact]
+        [TestMethod]
         public void TestAonAskNoMatchMulti()
         {
             var order_book = new SimpleOrderBook();
@@ -836,20 +837,20 @@ namespace Test
             var bid2 = new SimpleOrder(buySide, prc1, qty4);
 
             // No match
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch, expectNoComplete, AON));
-            Assert.True(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON)); //AON)); //noConditions
-            Assert.True(AddAndVerify(order_book, bid2, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON)); //AON)); //noConditions
+            Assert.IsTrue(AddAndVerify(order_book, bid2, expectNoMatch));
 
             // Verify sizes
-            Assert.Equal(3, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(3, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc1, 2, qty1 + qty4));
-            Assert.True(dc.VerifyBid(prc0, 1, qty4));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 2, qty1 + qty4));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty4));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
 
             // This test was bogus -- testing a bug in the matching algorithm
             // I fixed the bug and the test started to fail.
@@ -860,12 +861,12 @@ namespace Test
 
             // No match
             {
-//  ASSERT_NO_THROW(
+                //  ASSERT_NO_THROW(
                 var fc0 = new FillChecker(bid0, qty4, prc0 * qty4);
                 var fc1 = new FillChecker(bid1, qty1, qty1 * prc1);
                 var fc2 = new FillChecker(bid2, qty1, prc1 * qty1);
                 var fc3 = new FillChecker(ask1, qty6, prc0 * qty4 + qty1 * prc1 + prc1 * qty1);
-                Assert.True(AddAndVerify(order_book, ask1, expectMatch, expectComplete, AON));
+                Assert.IsTrue(AddAndVerify(order_book, ask1, expectMatch, expectComplete, AON));
                 fc0.AssertFillSuccess();
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
@@ -875,14 +876,14 @@ namespace Test
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc1, 1, qty4 - qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 1, qty4 - qty1));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestAonAskMatchAon()
         {
             var order_book = new SimpleOrderBook();
@@ -892,40 +893,40 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty4);
 
             // No match
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
 
             // Verify sizes
-            Assert.Equal(2, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(2, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
-            Assert.True(dc.VerifyBid(prc1, 1, qty2));
-            Assert.True(dc.VerifyBid(prc0, 1, qty4));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 1, qty2));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty4));
 
             // Match complete
             {
                 var fc1 = new FillChecker(bid1, qty2, prc1 * qty2);
                 var fc3 = new FillChecker(ask1, qty2, prc1 * qty2);
-                Assert.True(AddAndVerify(order_book, ask1, expectMatch, expectComplete, AON));
+                Assert.IsTrue(AddAndVerify(order_book, ask1, expectMatch, expectComplete, AON));
                 fc1.AssertFillSuccess();
                 fc3.AssertFillSuccess();
             }
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
-            Assert.True(dc.VerifyBid(prc0, 1, qty4));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty4));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestReplaceAonBidSmallerMatch()
         {
             var order_book = new SimpleOrderBook();
@@ -936,44 +937,44 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty1);
 
             // No match
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask1, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask2, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask1, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask2, expectNoMatch));
 
             // Verify sizes
-            Assert.Equal(2, order_book.Bids.Count());
-            Assert.Equal(3, order_book.Asks.Count());
+            Assert.AreEqual(2, order_book.Bids.Count());
+            Assert.AreEqual(3, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc1, 1, qty2));
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc3, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 1, qty2));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc3, 1, qty1));
 
             // Match - complete
             {
                 var fc2 = new FillChecker(ask0, qty1, prc1 * qty1);
-                Assert.True(ReplaceAndVerify(
+                Assert.IsTrue(ReplaceAndVerify(
                     order_book, bid1, -qty1, Constants.PriceUnchanged, OrderState.Complete, qty1));
                 fc2.AssertFillSuccess();
             }
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc3, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc3, 1, qty1));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(2, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(2, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestReplaceAonBidPriceMatch()
         {
             var order_book = new SimpleOrderBook();
@@ -984,29 +985,29 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty1);
 
             // No match
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask1, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask2, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask1, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask2, expectNoMatch));
 
             // Verify sizes
-            Assert.Equal(2, order_book.Bids.Count());
-            Assert.Equal(3, order_book.Asks.Count());
+            Assert.AreEqual(2, order_book.Bids.Count());
+            Assert.AreEqual(3, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc1, 1, qty2));
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc3, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 1, qty2));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc3, 1, qty1));
 
             // Match - complete
             {
                 var fc1 = new FillChecker(ask0, qty1, prc1 * qty1);
                 var fc2 = new FillChecker(ask1, qty1, prc2 * qty1);
-                Assert.True(ReplaceAndVerify(
+                Assert.IsTrue(ReplaceAndVerify(
                     order_book, bid1, qtyNone, prc2, OrderState.Complete, qty2));
                 fc1.AssertFillSuccess();
                 fc2.AssertFillSuccess();
@@ -1014,15 +1015,15 @@ namespace Test
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc3, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc3, 1, qty1));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(1, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(1, order_book.Asks.Count());
         }
 
-        [Fact]
+        [TestMethod]
         public void TestReplaceBidLargerMatchAon()
         {
             var order_book = new SimpleOrderBook();
@@ -1033,41 +1034,41 @@ namespace Test
             var bid0 = new SimpleOrder(buySide, prc0, qty1);
 
             // No match
-            Assert.True(AddAndVerify(order_book, bid0, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, bid1, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask0, expectNoMatch, expectNoComplete, AON));
-            Assert.True(AddAndVerify(order_book, ask1, expectNoMatch));
-            Assert.True(AddAndVerify(order_book, ask2, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid0, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, bid1, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch, expectNoComplete, AON));
+            Assert.IsTrue(AddAndVerify(order_book, ask1, expectNoMatch));
+            Assert.IsTrue(AddAndVerify(order_book, ask2, expectNoMatch));
 
             // Verify sizes
-            Assert.Equal(2, order_book.Bids.Count());
-            Assert.Equal(3, order_book.Asks.Count());
+            Assert.AreEqual(2, order_book.Bids.Count());
+            Assert.AreEqual(3, order_book.Asks.Count());
 
             // Verify depth
             var dc = new DepthCheck(order_book.Depth);
-            Assert.True(dc.VerifyBid(prc1, 1, qty1));
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc1, 1, qty2));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc3, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc1, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc1, 1, qty2));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc3, 1, qty1));
 
             // Match - complete
             {
                 var fc2 = new FillChecker(ask0, qty2, qty2 * prc1);
-                Assert.True(ReplaceAndVerify(
+                Assert.IsTrue(ReplaceAndVerify(
                     order_book, bid1, qty1, Constants.PriceUnchanged, OrderState.Complete, qty2));
                 fc2.AssertFillSuccess();
             }
 
             // Verify depth
             dc.Reset();
-            Assert.True(dc.VerifyBid(prc0, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc2, 1, qty1));
-            Assert.True(dc.VerifyAsk(prc3, 1, qty1));
+            Assert.IsTrue(dc.VerifyBid(prc0, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc2, 1, qty1));
+            Assert.IsTrue(dc.VerifyAsk(prc3, 1, qty1));
 
             // Verify sizes
-            Assert.Equal(1, order_book.Bids.Count());
-            Assert.Equal(2, order_book.Asks.Count());
+            Assert.AreEqual(1, order_book.Bids.Count());
+            Assert.AreEqual(2, order_book.Asks.Count());
         }
     }
 }

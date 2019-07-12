@@ -1,10 +1,11 @@
-﻿using System;
-using System.Linq;
-using Liquibook.NET.Book;
+﻿using Liquibook.NET.Book;
 using Liquibook.NET.Types;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace Test
 {
+    [TestClass]
     public class DepthCheck
     {
         private int AskIndex { get; set; } = 0;

@@ -1,12 +1,87 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <PackageId>jkulubya.Liquibook.NET</PackageId>
-    <Version>0.0.4</Version>
-    <Authors>@jkulubya</Authors>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{70FE89C6-6418-4457-B3F2-9758E34BB86C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Liquibook.NET</RootNamespace>
+    <AssemblyName>Liquibook.NET</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Collections.Immutable" Version="1.5.0-preview2-26406-04" />
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Book\Callback.cs" />
+    <Compile Include="Book\ComparablePrice.cs" />
+    <Compile Include="Book\Depth.cs" />
+    <Compile Include="Book\DepthConstants.cs" />
+    <Compile Include="Book\DepthLevel.cs" />
+    <Compile Include="Book\DepthOrderBook.cs" />
+    <Compile Include="Book\IBboListener.cs" />
+    <Compile Include="Book\IDepthListener.cs" />
+    <Compile Include="Book\IOrder.cs" />
+    <Compile Include="Book\IOrderBookListener.cs" />
+    <Compile Include="Book\IOrderListener.cs" />
+    <Compile Include="Book\ITradeListener.cs" />
+    <Compile Include="Book\Order.cs" />
+    <Compile Include="Book\OrderBook.cs" />
+    <Compile Include="Book\OrderConditions.cs" />
+    <Compile Include="Book\OrderTracker.cs" />
+    <Compile Include="Events\OnAcceptEventArgs.cs" />
+    <Compile Include="Events\OnBboChangeEventArgs.cs" />
+    <Compile Include="Events\OnCancelEventArgs.cs" />
+    <Compile Include="Events\OnCancelRejectEventArgs.cs" />
+    <Compile Include="Events\OnDepthChangeEventArgs.cs" />
+    <Compile Include="Events\OnFillEventArgs.cs" />
+    <Compile Include="Events\OnOrderBookChangeEventArgs.cs" />
+    <Compile Include="Events\OnRejectEventArgs.cs" />
+    <Compile Include="Events\OnReplaceEventArgs.cs" />
+    <Compile Include="Events\OnReplaceRejectEventArgs.cs" />
+    <Compile Include="Events\OnTradeEventArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Simple\OrderState.cs" />
+    <Compile Include="Simple\SimpleOrder.cs" />
+    <Compile Include="Simple\SimpleOrderBook.cs" />
+    <Compile Include="Types\Constants.cs" />
+    <Compile Include="Types\Multimap.cs" />
+    <Compile Include="Types\Price.cs" />
+    <Compile Include="Types\Quantity.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
