@@ -12,6 +12,9 @@ namespace Liquibook.NET.Book
         bool AllOrNone { get; }
         bool ImmediateOrCancel { get; }
 
+        string OrderIdExt { get; set; } // External Id
+        string OrderDomain { get; set; } // DT, EQ, FX
+
         // TODO: investigate methods at bottom of related cpp class
     }
 }

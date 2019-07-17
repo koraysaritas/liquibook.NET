@@ -11,5 +11,7 @@ namespace Liquibook.NET.Book
         public Quantity OrderQty { get; set; }
         public virtual bool AllOrNone => false;
         public virtual bool ImmediateOrCancel  => false;
+        public string OrderIdExt { get; set; } // External Id
+        public string OrderDomain { get; set; } // DT, EQ, FX
     }
 }
