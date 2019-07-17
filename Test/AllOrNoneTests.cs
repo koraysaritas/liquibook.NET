@@ -427,10 +427,10 @@ namespace Test
             // leaving 500 shares of bid 0)
             Quantity bid0FillQty = qty4 - qty1 - qty1;
             Quantity bid0RemainQty = qty7 - bid0FillQty;
-            int bid0FillAmount = bid0FillQty * prc0;
-            int bid1FillAmount = prc1 * qty1;
-            int bid2FillAmount = prc1 * qty1;
-            int ask1FillAmount = bid1FillAmount + bid2FillAmount + bid0FillAmount;
+            decimal bid0FillAmount = bid0FillQty * prc0;
+            decimal bid1FillAmount = prc1 * qty1;
+            decimal bid2FillAmount = prc1 * qty1;
+            decimal ask1FillAmount = bid1FillAmount + bid2FillAmount + bid0FillAmount;
 
             // No match
             Assert.IsTrue(AddAndVerify(order_book, ask0, expectNoMatch));
@@ -597,16 +597,16 @@ namespace Test
             {
                 // ASSERT_NO_THROW(
 
-                int b1Cost = prc1 * qty1;
+                decimal b1Cost = prc1 * qty1;
                 var fc0 = new FillChecker(bid1, qty1, b1Cost);
-                int b2Cost = prc1 * qty1;
+                decimal b2Cost = prc1 * qty1;
                 var fc1 = new FillChecker(bid2, qty1, b2Cost);
-                int b3Cost = prc1 * qty1;
+                decimal b3Cost = prc1 * qty1;
                 var fc2 = new FillChecker(bid3, qty1, b3Cost);
                 Quantity b0Fill = qty6 - qty1 - qty1 - qty1;
-                int b0Cost = b0Fill * prc0;
+                decimal b0Cost = b0Fill * prc0;
                 var fc3 = new FillChecker(bid0, b0Fill, b0Cost);
-                int a1Cost = b0Cost + b1Cost + b2Cost + b3Cost;
+                decimal a1Cost = b0Cost + b1Cost + b2Cost + b3Cost;
                 var fc4 = new FillChecker(ask1, qty6, a1Cost);
                 Assert.IsTrue(AddAndVerify(order_book, ask1, expectMatch, expectComplete, AON));
                 fc0.AssertFillSuccess();

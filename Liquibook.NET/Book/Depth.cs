@@ -124,7 +124,7 @@ namespace Liquibook.NET.Book
             }
         }
 
-        public bool ReplaceOrder(int currentPrice, int newPrice, Quantity currentQuantity, Quantity newQuantity, bool isBid)
+        public bool ReplaceOrder(decimal currentPrice, decimal newPrice, Quantity currentQuantity, Quantity newQuantity, bool isBid)
         {
             var erased = false;
             if (currentPrice == newPrice)

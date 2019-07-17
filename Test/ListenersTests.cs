@@ -357,7 +357,7 @@ namespace Test
             costs_.Clear();
         }
         public List<Quantity> quantities_ { get; } = new List<Quantity>();
-        public List<int> costs_ { get; } = new List<int>();
+        public List<decimal> costs_ { get; } = new List<decimal>();
     }
 
     public class OrderBookCbListener : IOrderBookListener

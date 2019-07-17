@@ -10,7 +10,7 @@ namespace Liquibook.NET.Book
         public bool AllOrNone => Convert.ToBoolean(Conditions & OrderConditions.AllOrNone);
         public bool ImmediateOrCancel => (Conditions & OrderConditions.ImmediateOrCancel) != 0;
         private OrderConditions Conditions { get; set; }
-        private int Reserved { get; set; } = 0;
+        private decimal Reserved { get; set; } = 0;
         public IOrder Order { get; set; }
         
         public OrderTracker(IOrder order, OrderConditions condition, bool liquibookOrderKnowsConditions = false)
@@ -40,7 +40,7 @@ namespace Liquibook.NET.Book
             return _openQuantity - Reserved;
         }
 
-        public void ChangeQuantity(int delta)
+        public void ChangeQuantity(decimal delta)
         {
             if ((delta < 0) && OpenQuantity < Math.Abs(delta))
             {

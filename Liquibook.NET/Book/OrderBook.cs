@@ -125,7 +125,7 @@ namespace Liquibook.NET.Book
             CallbackNow();
         }
 
-        public bool Replace(IOrder order, int sizeDelta, Price newPrice)
+        public bool Replace(IOrder order, decimal sizeDelta, Price newPrice)
         {
             var matched = false;
             var priceChange = newPrice != order.Price;
@@ -355,7 +355,7 @@ namespace Liquibook.NET.Book
         {
             var matched = false;
             var inboundQuantity = inbound.OpenQuantity;
-            var deferredQuantity = 0;
+            var deferredQuantity = 0M;
             var deferredMatches = new DeferredMatches();
 
             foreach (var kvp in currentOrders)
@@ -478,7 +478,7 @@ namespace Liquibook.NET.Book
             return traded;
         }
 
-        protected Quantity CreateTrade(OrderTracker inboundTracker, OrderTracker currentTracker, int maxQuantity = -1)
+        protected Quantity CreateTrade(OrderTracker inboundTracker, OrderTracker currentTracker, decimal maxQuantity = -1)
         {
             var crossPrice = currentTracker.Order.Price;
 
@@ -599,13 +599,13 @@ namespace Liquibook.NET.Book
         
         protected virtual void OnAccept(IOrder order, Quantity quantity){}
         protected virtual void OnReject(IOrder order, string reason){}
-        protected virtual void OnFill(IOrder order, IOrder matchedOrder, Quantity fillQuantity, int fillCost,
+        protected virtual void OnFill(IOrder order, IOrder matchedOrder, Quantity fillQuantity, decimal fillCost,
             bool inboundOrderFilled, bool matchedOrderFilled){}
         protected virtual void OnCancel(IOrder order, Quantity quantity){}
         protected virtual void OnCancelReject(IOrder order, string reason){}
         protected virtual void OnReplace(IOrder order, Quantity currentQuantity, Quantity newQuantity, Price newPrice){}
         protected virtual void OnReplaceReject(IOrder order, string reason){}
-        protected virtual void OnTrade(OrderBook book, Quantity quantity, int cost){}
+        protected virtual void OnTrade(OrderBook book, Quantity quantity, decimal cost){}
         protected virtual void OnOrderBookChange(){}
 
         protected event EventHandler<OnAcceptEventArgs> OnAcceptEvent;

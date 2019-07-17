@@ -1,6 +1,5 @@
-﻿using System;
-using System.Net.Http.Headers;
-using Liquibook.NET.Types;
+﻿using Liquibook.NET.Types;
+using System;
 
 namespace Liquibook.NET.Book
 {

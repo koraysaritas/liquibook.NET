@@ -30,7 +30,7 @@ namespace Liquibook.NET.Book
             }
         }
 
-        protected override void OnFill(IOrder order, IOrder matchedOrder, Quantity fillQuantity, int fillCost, bool inboundOrderFilled,
+        protected override void OnFill(IOrder order, IOrder matchedOrder, Quantity fillQuantity, decimal fillCost, bool inboundOrderFilled,
             bool matchedOrderFilled)
         {
             if (matchedOrder.IsLimit)

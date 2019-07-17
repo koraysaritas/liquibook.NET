@@ -12,10 +12,10 @@ namespace Test
         private IOrder Order { get; }
         private Quantity ExpectedFilledQuantity { get; }
         private Quantity ExpectedOpenQuantity { get; }
-        private int ExpectedFilledCost { get; }
+        private decimal ExpectedFilledCost { get; }
         private OrderConditions Conditions { get; }
         
-        public FillChecker(IOrder order, Quantity filledQuantity, int filledCost, OrderConditions conditions = 0)
+        public FillChecker(IOrder order, Quantity filledQuantity, decimal filledCost, OrderConditions conditions = 0)
         {
             Order = order;
             ExpectedFilledQuantity = (order as SimpleOrder).FilledQuantity + filledQuantity;

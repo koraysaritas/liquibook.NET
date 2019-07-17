@@ -9,7 +9,7 @@ namespace Liquibook.NET.Simple
         public override bool ImmediateOrCancel => ((Conditions & OrderConditions.ImmediateOrCancel) != 0);
         public OrderConditions Conditions { get; set; }
         public Quantity FilledQuantity { get; set; } = 0;
-        public int FilledCost { get; set; } = 0;
+        public decimal FilledCost { get; set; } = 0;
         public static int LastOrderId { get; set; }
         public int OrderId { get; set; }
         public OrderState State { get; private set; }
@@ -45,7 +45,7 @@ namespace Liquibook.NET.Simple
             State = OrderState.New;
         }
 
-        public void Fill(Quantity fillQuantity, int fillCost, int fillId)
+        public void Fill(Quantity fillQuantity, decimal fillCost, int fillId)
         {
             FilledQuantity += fillQuantity;
             FilledCost += fillCost;

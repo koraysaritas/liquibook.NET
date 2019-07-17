@@ -37,7 +37,7 @@ namespace Test
             return (order as SimpleOrder)?.State == expectedState;
         }
 
-        internal static bool ReplaceAndVerify(OrderBook orderBook, IOrder order, int sizechange,
+        internal static bool ReplaceAndVerify(OrderBook orderBook, IOrder order, decimal sizechange,
             Price newPrice = new Price(), OrderState expectedState = OrderState.Accepted,
             Quantity matchQuantity = new Quantity())
         {

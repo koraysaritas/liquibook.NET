@@ -9,9 +9,9 @@ namespace Test
     {
         private const bool sideBuy = true;
         private const bool sideSell = false;
-        private readonly Price prcMkt = 0;
-        private readonly Price prc0 = 9900;
-        private readonly Quantity q100 = 100;
+        private readonly Price prcMkt = 0M;
+        private readonly Price prc0 = 9900M;
+        private readonly Quantity q100 = 100M;
         private const bool ExpectMatch = true;
         private const bool ExpectNoMatch = false;
         private const bool ExpectComplete = true;

@@ -6,19 +6,19 @@ namespace Liquibook.NET.Types
     [DebuggerDisplay("{m_value, nq}")]
     public struct Quantity : IComparable<Quantity>, IEquatable<Quantity>
     {
-        private readonly int m_value;
+        private readonly decimal m_value;
 
-        private Quantity(int quantity)
+        private Quantity(decimal quantity)
         {
             m_value = quantity;
         }
         
-        public static implicit operator Quantity(int quantity)
+        public static implicit operator Quantity(decimal quantity)
         {
             return new Quantity(quantity);
         }
 
-        public static implicit operator int(Quantity c)
+        public static implicit operator decimal(Quantity c)
         {
             return c.m_value;
         }
@@ -43,7 +43,7 @@ namespace Liquibook.NET.Types
             return a.m_value * b.m_value;
         }
 
-        public static int operator *(Quantity a, Price b)
+        public static decimal operator *(Quantity a, Price b)
         {
             return a.m_value * b;
         }
@@ -70,7 +70,7 @@ namespace Liquibook.NET.Types
 
         public override int GetHashCode()
         {
-            return m_value;
+            return base.GetHashCode();
         }
 
         public int CompareTo(Quantity other)

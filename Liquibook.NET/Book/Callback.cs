@@ -10,7 +10,7 @@ namespace Liquibook.NET.Book
         public Quantity Quantity { get; set; }
         public Price Price { get; set; }
         public FillFlag Flag { get; set; }
-        public int Delta { get; set; }
+        public decimal Delta { get; set; }
         public string RejectReason { get; set; }
 
         public static Callback Accept(IOrder order)
@@ -71,7 +71,7 @@ namespace Liquibook.NET.Book
             return result;
         }
 
-        public static Callback Replace(IOrder order, Quantity currentOpenQuantity, int sizeDelta, Price newPrice)
+        public static Callback Replace(IOrder order, Quantity currentOpenQuantity, decimal sizeDelta, Price newPrice)
         {
             var result = new Callback
             {

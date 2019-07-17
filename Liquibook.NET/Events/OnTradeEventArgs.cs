@@ -7,9 +7,9 @@ namespace Liquibook.NET.Events
     {
         public OrderBook Book { get; }
         public Quantity Quantity { get; }
-        public int Cost { get; }
+        public decimal Cost { get; }
 
-        public OnTradeEventArgs(OrderBook book, Quantity quantity, int cost)
+        public OnTradeEventArgs(OrderBook book, Quantity quantity, decimal cost)
         {
             Book = book;
             Quantity = quantity;
