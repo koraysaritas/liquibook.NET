@@ -71,9 +71,9 @@ namespace Liquibook.NET.Simple
             }
         }
 
-        public void Replace(Quantity sizeDelta, Price newPrice)
+        public void Replace(Quantity sizeDelta, Price newPrice, bool force = false)
         {
-            if (State == OrderState.Accepted)
+            if (force || State == OrderState.Accepted)
             {
                 OrderQty += sizeDelta;
                 Price = newPrice;
