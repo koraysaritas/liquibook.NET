@@ -637,6 +637,17 @@ namespace Liquibook.NET.Book
             OnReplaceRejectEvent += orderListener.OnReplaceReject;
         }
 
+        public void RemoveOrderListeners()
+        {
+            OnAcceptEvent = null;
+            OnRejectEvent = null;
+            OnFillEvent = null;
+            OnCancelEvent = null;
+            OnCancelRejectEvent = null;
+            OnReplaceEvent = null;
+            OnReplaceRejectEvent = null;
+        }
+
         public void SetTradeListener(ITradeListener tradeListener)
         {
             if(tradeListener == null) return;
@@ -644,11 +655,21 @@ namespace Liquibook.NET.Book
             OnTradeEvent += tradeListener.OnTrade;
         }
 
+        public void RemoveTradeListeners()
+        {
+            OnTradeEvent = null;
+        }
+
         public void SetOrderBookListener(IOrderBookListener orderBookListener)
         {
             if (orderBookListener == null) return;
             OnOrderBookChangeEvent = null;
             OnOrderBookChangeEvent += orderBookListener.OnOrderBookChange;
+        }
+
+        public void RemoveOrderBookListeners()
+        {
+            OnOrderBookChangeEvent = null;
         }
     }
 }
